@@ -522,31 +522,38 @@ function update(timestamp) {
             y: snake[0].y + direction.y
         };
         
+        let collided = false;
+        
         // 3. 碰撞墙壁检测
         if (head.x < 0 || head.x >= GRID.cols || head.y < 0 || head.y >= GRID.rows) {
             handleDeath();
-            return;
+            collided = true;
         }
         
         // 4. 碰撞自己身体检测
-        for (let segment of snake) {
-            if (head.x === segment.x && head.y === segment.y) {
-                handleDeath();
-                return;
+        if (!collided) {
+            for (let segment of snake) {
+                if (head.x === segment.x && head.y === segment.y) {
+                    handleDeath();
+                    collided = true;
+                    break;
+                }
             }
         }
         
-        // 5. 蛇头插入队列
-        snake.unshift(head);
-        
-        // 6. 吃食判定
-        if (head.x === food.x && head.y === food.y) {
-            score += 10 * speedLevel; // 得分受档位乘积影响
-            SFX.eat();
-            spawnFood();
-        } else {
-            // 没有吃食物，队列尾部出队
-            snake.pop();
+        if (!collided) {
+            // 5. 蛇头插入队列
+            snake.unshift(head);
+            
+            // 6. 吃食判定
+            if (head.x === food.x && head.y === food.y) {
+                score += 10 * speedLevel; // 得分受档位乘积影响
+                SFX.eat();
+                spawnFood();
+            } else {
+                // 没有吃食物，队列尾部出队
+                snake.pop();
+            }
         }
     }
     
