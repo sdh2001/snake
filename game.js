@@ -218,15 +218,7 @@ numKeys[6].addEventListener('click', () => handleDirection('RIGHT'));
 // 中间5号键暂停/选项确认
 numKeys[5].addEventListener('click', handleOptionButton);
 
-// 数字按键在选关时设定速度档位
-for (let i = 1; i <= 9; i++) {
-    numKeys[i].addEventListener('click', () => {
-        if (gameState === STATES.LEVEL_SELECT) {
-            speedLevel = i;
-            SFX.turn();
-        }
-    });
-}
+// (已移除数字直接选择档位，改用 2/8 键上下调整以还原诺基亚菜单体验)
 
 // 物理选项与返回键绑定
 btnOpt.addEventListener('click', handleOptionButton);
