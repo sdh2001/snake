@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nokia Snake - 诺基亚经典贪吃蛇</title>
+    <!-- 像素与复古字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 游戏返回大厅链接 (独立部署时隐藏) -->
+    <!-- <a href="../" class="back-link">◀ 返回游戏大厅</a> -->
+
+    <div id="phone-wrapper">
+        <!-- 诺基亚 3310 手机实体外壳 -->
+        <div class="nokia-body">
+            <!-- 手机上方扬声器 -->
+            <div class="speaker-grill"></div>
+            
+            <!-- 诺基亚标志 -->
+            <div class="nokia-brand">NOKIA</div>
+            
+            <!-- LCD 液晶屏幕视窗 -->
+            <div class="screen-frame">
+                <div class="lcd-screen">
+                    <!-- LCD 噪点/反射层 -->
+                    <div class="lcd-glare"></div>
+                    
+                    <!-- 游戏 Canvas 画布 (低画质点阵复刻) -->
+                    <canvas id="lcdCanvas" width="200" height="150"></canvas>
+                </div>
+            </div>
+            
+            <!-- 诺基亚物理按键面板 -->
+            <div class="nokia-keypad">
+                <!-- 动作按键 -->
+                <div class="row key-actions">
+                    <button id="btn-opt" class="key metal-key short-key"><span class="label">选择</span></button>
+                    <button id="btn-back" class="key metal-key short-key"><span class="label">返回</span></button>
+                </div>
+                
+                <!-- T9 数字键键盘区 -->
+                <div class="num-grid">
+                    <button id="key-1" class="key num-key">1 <span class="sub">o_o</span></button>
+                    <button id="key-2" class="key num-key active-nav">2 <span class="sub">▲ / ABC</span></button>
+                    <button id="key-3" class="key num-key">3 <span class="sub">DEF</span></button>
+                    
+                    <button id="key-4" class="key num-key active-nav">4 <span class="sub">◀ / GHI</span></button>
+                    <button id="key-5" class="key num-key">5 <span class="sub">JKL</span></button>
+                    <button id="key-6" class="key num-key active-nav">6 <span class="sub">▶ / MNO</span></button>
+                    
+                    <button id="key-7" class="key num-key">7 <span class="sub">PQRS</span></button>
+                    <button id="key-8" class="key num-key active-nav">8 <span class="sub">▼ / TUV</span></button>
+                    <button id="key-9" class="key num-key">9 <span class="sub">WXYZ</span></button>
+                    
+                    <button id="key-star" class="key num-key">* <span class="sub">+</span></button>
+                    <button id="key-0" class="key num-key">0 <span class="sub">_</span></button>
+                    <button id="key-hash" class="key num-key"># <span class="sub">⇧</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 游戏主逻辑 -->
+    <script src="game.js"></script>
+</body>
+</html>

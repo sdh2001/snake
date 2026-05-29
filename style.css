@@ -1,0 +1,323 @@
+/* 诺基亚 3310 复古样式系统 */
+:root {
+    --nokia-blue: #1c2b3e;
+    --nokia-silver: #a0aab5;
+    --nokia-dark: #121c29;
+    --lcd-bg: #8b956d;      /* 经典诺基亚绿偏黄液晶屏 */
+    --lcd-pixel: #2b3b22;   /* 经典液晶墨水色 */
+    --key-bg: #e1e6eb;
+    --key-text: #333d47;
+    --font-mono: 'Share Tech Mono', monospace;
+    --font-arcade: 'Press Start 2P', cursive;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+body {
+    background-color: #0d0f12;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-image: 
+        radial-gradient(circle at center, #1b212c 0%, #060709 100%);
+    overflow-x: hidden;
+    padding: 20px 10px;
+}
+
+/* 返回大厅链接 */
+.back-link {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: #8fa0c0;
+    text-decoration: none;
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    font-weight: bold;
+    transition: color 0.2s;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 8px 16px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.back-link:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* 手机缩放容器 */
+#phone-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 1000px;
+    margin-top: 40px;
+}
+
+/* 诺基亚 3310 机身外壳 */
+.nokia-body {
+    width: 360px;
+    height: 680px;
+    background: linear-gradient(135deg, var(--nokia-blue) 0%, #15202e 100%);
+    border-radius: 40px 40px 120px 120px; /* 3310 特特的下方收窄弧度 */
+    box-shadow: 
+        0 25px 50px rgba(0, 0, 0, 0.6), 
+        inset 0 4px 6px rgba(255, 255, 255, 0.15), 
+        inset 0 -10px 20px rgba(0, 0, 0, 0.5);
+    border: 4px solid #273950;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+/* 扬声器孔 */
+.speaker-grill {
+    width: 60px;
+    height: 8px;
+    background-color: #0b111a;
+    border-radius: 4px;
+    margin-top: 10px;
+    box-shadow: inset 0 2px 3px rgba(0,0,0,0.8);
+}
+
+/* 标志 */
+.nokia-brand {
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 900;
+    font-size: 1.15rem;
+    color: var(--nokia-silver);
+    letter-spacing: 3px;
+    margin-top: 15px;
+    margin-bottom: 12px;
+    text-shadow: 0 -1px 1px rgba(0,0,0,0.6);
+}
+
+/* 屏幕凹槽框 */
+.screen-frame {
+    width: 100%;
+    background: #d8dde2;
+    border-radius: 20px 20px 30px 30px;
+    padding: 16px 20px 24px 20px;
+    box-shadow: 
+        inset 0 4px 10px rgba(0,0,0,0.4),
+        0 2px 4px rgba(255, 255, 255, 0.1);
+    border: 2px solid #5a6675;
+    margin-bottom: 25px;
+}
+
+/* 液晶屏 */
+.lcd-screen {
+    width: 100%;
+    height: 180px;
+    background-color: var(--lcd-bg);
+    border-radius: 4px;
+    box-shadow: 
+        inset 0 8px 12px rgba(0, 0, 0, 0.4),
+        0 1px 0 rgba(255,255,255,0.9);
+    border: 3px solid #1a2215;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* LCD 玻璃眩光贴图 */
+.lcd-glare {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 150%;
+    height: 150%;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 50%);
+    pointer-events: none;
+    z-index: 3;
+}
+
+/* LCD 点阵网格纸贴层 */
+.lcd-screen::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+    background-size: 2px 2px;
+    pointer-events: none;
+    z-index: 2;
+}
+
+canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+/* 键盘面板 */
+.nokia-keypad {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.row-center {
+    justify-content: center;
+}
+
+/* 物理按键基本样式 (3D浮雕) */
+.key {
+    background: linear-gradient(to bottom, #f7f9fa 0%, #cbd2d8 100%);
+    color: var(--key-text);
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-weight: 900;
+    box-shadow: 
+        0 4px 0 #85919e, 
+        0 5px 8px rgba(0, 0, 0, 0.4),
+        inset 0 1px 1px rgba(255, 255, 255, 0.9);
+    transition: all 0.05s ease;
+    border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%; /* 弧形塑料按键 */
+}
+
+.key:active {
+    transform: translateY(3px);
+    box-shadow: 
+        0 1px 0 #85919e, 
+        0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* 操作键 */
+.key-actions {
+    padding: 0 32px;
+    margin-bottom: 25px;
+}
+
+.short-key {
+    width: 70px;
+    height: 34px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-family: sans-serif;
+    color: #4a545e;
+}
+
+/* 方向导航键 */
+.arrow-key {
+    width: 80px;
+    height: 38px;
+    border-radius: 40% 40% 10% 10% / 60% 60% 10% 10%;
+    font-size: 0.9rem;
+    color: #1a2215;
+}
+
+.arrow-key-down {
+    width: 80px;
+    height: 38px;
+    border-radius: 10% 10% 40% 40% / 10% 10% 60% 60%;
+    font-size: 0.9rem;
+    margin-top: -12px; /* 紧贴上方的空隙 */
+    color: #1a2215;
+}
+
+.nav-row {
+    margin-bottom: 2px;
+    padding: 0 45px;
+}
+
+.nav-lr {
+    width: 50px;
+    height: 32px;
+    border-radius: 30%;
+    font-size: 0.8rem;
+}
+
+.key-center-spacer {
+    width: 70px;
+}
+
+/* 数字按键网格 */
+.num-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px 18px;
+    width: 90%;
+    margin-top: 15px;
+}
+
+.num-key {
+    height: 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.15rem;
+    border-radius: 20px 20px 30px 30px / 30% 30% 60% 60%;
+}
+
+.num-key .sub {
+    font-size: 0.55rem;
+    color: #727e8a;
+    font-weight: bold;
+    margin-top: 1px;
+}
+
+/* 强调用于贪吃蛇控制的 2, 4, 6, 8 键 */
+.active-nav {
+    background: linear-gradient(to bottom, #ffffff 0%, #dbe2e9 100%);
+    box-shadow: 
+        0 4px 0 #7fa6cb, 
+        0 5px 8px rgba(0, 0, 0, 0.4),
+        0 0 8px rgba(0, 240, 255, 0.1);
+    border: 1px solid rgba(0, 240, 255, 0.2);
+}
+
+.active-nav:active {
+    box-shadow: 0 1px 0 #7fa6cb, 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* 触按微晃动画 */
+@keyframes keypress-shake {
+    0%, 100% { transform: rotate(0); }
+    50% { transform: rotate(1deg) translateY(2px); }
+}
+
+/* 适配超窄屏幕 */
+@media (max-height: 700px) {
+    #phone-wrapper {
+        transform: scale(0.9);
+        margin-top: 10px;
+    }
+}
+@media (max-height: 620px) {
+    #phone-wrapper {
+        transform: scale(0.8);
+        margin-top: 0px;
+    }
+}
