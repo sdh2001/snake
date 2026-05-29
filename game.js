@@ -47,7 +47,12 @@ let foodBlink = true;
 let blinkTimer = 0;
 
 let score = 0;
-let highScore = localStorage.getItem('nokia_snake_high_score') || 0;
+let highScore = 0;
+try {
+    highScore = localStorage.getItem('nokia_snake_high_score') || 0;
+} catch (e) {
+    console.warn("localStorage read failed at startup:", e);
+}
 let speedLevel = 5; // 速度档位：1-9 档
 let moveTimer = 0;
 
@@ -66,23 +71,29 @@ function initAudio() {
 // 模拟 8-bit 蜂鸣器方波声
 function playBeep(frequency, duration, volume = 0.05) {
     if (!audioCtx) return;
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-    
-    const osc = audioCtx.createOscillator();
-    const gainNode = audioCtx.createGain();
-    
-    // 使用方波 (Square Wave) 复刻旧蜂鸣器特有的沙哑感
-    osc.type = 'square';
-    osc.frequency.value = frequency;
-    
-    gainNode.gain.setValueAtTime(volume, audioCtx.currentTime);
-    // 音量瞬时切断，无包络渐变，模仿低端扬声器
-    gainNode.gain.setValueAtTime(0, audioCtx.currentTime + duration);
-    
-    osc.connect(gainNode);
-    gainNode.connect(audioCtx.destination);
-    osc.start();
-    osc.stop(audioCtx.currentTime + duration + 0.02);
+    try {
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume().catch(err => console.warn("AudioContext resume failed:", err));
+        }
+        
+        const osc = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        
+        // 使用方波 (Square Wave) 复刻旧蜂鸣器特有的沙哑感
+        osc.type = 'square';
+        osc.frequency.value = frequency;
+        
+        gainNode.gain.setValueAtTime(volume, audioCtx.currentTime);
+        // 音量瞬时切断，无包络渐变，模仿低端扬声器
+        gainNode.gain.setValueAtTime(0, audioCtx.currentTime + duration);
+        
+        osc.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration + 0.02);
+    } catch (e) {
+        console.warn("Web Audio API playBeep failed:", e);
+    }
 }
 
 // 经典的音效合集
@@ -545,11 +556,20 @@ function update(timestamp) {
 
 function handleDeath() {
     gameState = STATES.GAMEOVER;
-    SFX.die();
     
-    if (score > highScore) {
-        highScore = score;
-        localStorage.setItem('nokia_snake_high_score', score);
+    try {
+        SFX.die();
+    } catch (e) {
+        console.warn("Failed to play death sound:", e);
+    }
+    
+    try {
+        if (score > highScore) {
+            highScore = score;
+            localStorage.setItem('nokia_snake_high_score', score);
+        }
+    } catch (e) {
+        console.warn("localStorage write failed:", e);
     }
 }
 
