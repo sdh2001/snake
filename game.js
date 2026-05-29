@@ -173,11 +173,19 @@ window.addEventListener('keydown', (e) => {
             break;
         case 'ArrowLeft':
         case 'KeyA':
-            handleDirection('LEFT');
+            if (gameState === STATES.PLAYING) {
+                handleDirection('LEFT');
+            } else {
+                handleOptionButton();
+            }
             break;
         case 'ArrowRight':
         case 'KeyD':
-            handleDirection('RIGHT');
+            if (gameState === STATES.PLAYING) {
+                handleDirection('RIGHT');
+            } else {
+                handleBackButton();
+            }
             break;
         case 'Enter':
         case 'Space':
@@ -251,11 +259,11 @@ function handleBackButton() {
 // 档位选择时的方向键逻辑 (在菜单或速度选择中，用方向键增减档速)
 function checkMenuNavigation(e) {
     if (gameState === STATES.LEVEL_SELECT) {
-        if (e.code === 'ArrowUp' || e.code === 'KeyW' || e.code === 'ArrowRight' || e.code === 'KeyD') {
+        if (e.code === 'ArrowUp' || e.code === 'KeyW') {
             speedLevel = Math.min(9, speedLevel + 1);
             SFX.turn();
         }
-        if (e.code === 'ArrowDown' || e.code === 'KeyS' || e.code === 'ArrowLeft' || e.code === 'KeyA') {
+        if (e.code === 'ArrowDown' || e.code === 'KeyS') {
             speedLevel = Math.max(1, speedLevel - 1);
             SFX.turn();
         }
@@ -402,9 +410,9 @@ function drawMenu() {
     // 3310 开机小图标 (蛇头造型)
     drawPixelRect(48, 76, 104, 3);
     
-    // 底部“选择”按钮提示
-    drawPixelText("▶ 选择", 12, 140, '9px');
-    drawPixelText("最高分:" + highScore, 90, 140, '8px');
+    // 底部“选择”按钮提示 (左侧对应“选择”按钮)
+    drawPixelText("选择", 12, 140, '9px');
+    drawPixelText("最高分:" + highScore, 96, 140, '8px');
 }
 
 function drawLevelSelect() {
@@ -413,8 +421,9 @@ function drawLevelSelect() {
     // 绘制巨大的数字速度档位
     drawPixelText(`档速: < ${speedLevel} >`, 45, 95, '15px');
     
-    drawPixelText("◀ 调整", 12, 140, '9px');
-    drawPixelText("确认 ▶", canvas.width - 48, 140, '9px');
+    // 底部提示 (左侧确认，右侧返回)
+    drawPixelText("确认", 12, 140, '9px');
+    drawPixelText("返回", canvas.width - 32, 140, '9px');
 }
 
 function drawGamePlay() {
@@ -470,8 +479,9 @@ function drawGameOver() {
     drawPixelText("游戏结束!", 55, 60, '16px');
     drawPixelText("最终得分: " + score, 45, 95, '11px');
     
-    drawPixelText("◀ 返回", 12, 140, '9px');
-    drawPixelText("重玩 ▶", canvas.width - 48, 140, '9px');
+    // 底部提示 (左侧重玩，右侧返回)
+    drawPixelText("重玩", 12, 140, '9px');
+    drawPixelText("返回", canvas.width - 32, 140, '9px');
 }
 
 // ==========================================
@@ -542,6 +552,22 @@ function handleDeath() {
         localStorage.setItem('nokia_snake_high_score', score);
     }
 }
+
+// 物理选项与返回键绑定
+btnOpt.addEventListener('click', handleOptionButton);
+btnBack.addEventListener('click', handleBackButton);
+
+// 点击屏幕也可以交互
+canvas.addEventListener('click', () => {
+    initAudio();
+    if (gameState === STATES.GAMEOVER) {
+        gameState = STATES.LEVEL_SELECT;
+        SFX.turn();
+    } else if (gameState === STATES.MENU) {
+        gameState = STATES.LEVEL_SELECT;
+        SFX.turn();
+    }
+});
 
 // 开机自启动与首帧触发
 SFX.startup();
